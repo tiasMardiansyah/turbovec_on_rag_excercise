@@ -1,2 +1,4 @@
 /.env
 /client_example.py
+/.tmp/*
+/data/*

@@ -10,14 +10,27 @@ from app.routes import health, ingest, query
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Eagerly load the vector store (triggers index load from disk)
+    # Initialize PostgreSQL connection pool
+    from app.services.database import database_service
+
+    await database_service.init_pool()
+    print("PostgreSQL connection pool initialized")
+
+    # Initialize vector store (start background flush thread)
     from app.services.vectorstore import vector_store
 
+    vector_store.start_flush_thread()
     print(
-        f"Index ready: {vector_store.total_chunks} chunks, "
-        f"{vector_store.total_documents} documents"
+        f"Vector store ready: {len(vector_store._stores)} company stores loaded, "
+        f"flush interval={settings.store_flush_interval}s"
     )
+
     yield
+
+    # Shutdown: flush dirty stores and close DB pool
+    vector_store.stop_flush_thread()
+    await database_service.close_pool()
+    print("Shutdown complete: stores flushed, DB pool closed")
 
 
 app = FastAPI(
@@ -25,9 +38,10 @@ app = FastAPI(
     description=(
         "A Retrieval-Augmented Generation template using "
         "FastAPI, LangChain orchestration, turbovec for vector search, "
-        "and OpenAI for embeddings + LLM."
+        "and OpenAI for embeddings + LLM. Supports multi-company isolation "
+        "with hierarchical search (sitesId > buildingId > companyId)."
     ),
-    version="2.0.0",
+    version="3.0.0",
     lifespan=lifespan,
 )
 
