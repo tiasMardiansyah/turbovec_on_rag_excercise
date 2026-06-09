@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-06-09T12:00:00Z",
+  "libraries": {
+    "turbovec": {
+      "files": [
+        {
+          "filename": "langchain-integration.md",
+          "topic": "LangChain integration — TurboQuantVectorStore drop-in replacement for InMemoryVectorStore",
+          "tech_stack": "LangChain",
+          "fetched": "2026-06-09T12:00:00Z",
+          "source": "Context7 API + GitHub raw README"
+        }
+      ]
+    },
+    "langchain-openai": {
+      "files": [
+        {
+          "filename": "openai-embeddings-chat.md",
+          "topic": "OpenAIEmbeddings and ChatOpenAI initialization, API surface, usage examples",
+          "tech_stack": "LangChain + OpenAI",
+          "fetched": "2026-06-09T12:00:00Z",
+          "source": "Context7 API"
+        }
+      ]
+    },
+    "langchain-loaders": {
+      "files": [
+        {
+          "filename": "pdf-docx-loaders.md",
+          "topic": "PyPDFLoader, Docx2txtLoader, UnstructuredWordDocumentLoader for PDF and DOCX",
+          "tech_stack": "LangChain",
+          "fetched": "2026-06-09T12:00:00Z",
+          "source": "Context7 API + LangChain docs"
+        }
+      ]
+    },
+    "langchain-text-splitters": {
+      "files": [
+        {
+          "filename": "recursive-character-text-splitter.md",
+          "topic": "RecursiveCharacterTextSplitter parameters, API, usage patterns",
+          "tech_stack": "LangChain",
+          "fetched": "2026-06-09T12:00:00Z",
+          "source": "Context7 API"
+        }
+      ]
+    }
+  }
+}
