@@ -2,7 +2,7 @@
 
 Multi-tenant Retrieval-Augmented Generation service built with FastAPI, [turbovec](https://pypi.org/project/turbovec/) for quantized vector search, PostgreSQL for metadata storage, and OpenAI for embeddings + LLM.
 
-Supports **multi-company isolation** with **hierarchical search** (sitesId > buildingId > companyId) — designed as a drop-in replacement for ChromaDB-based RAG pipelines.
+Supports **multi-company isolation** with **hierarchical search** (sitesId > buildingId > companyId).
 
 ## Architecture
 
@@ -35,7 +35,7 @@ Supports **multi-company isolation** with **hierarchical search** (sitesId > bui
 
 ### Why turbovec?
 
-Turbovec quantizes embeddings to 2-4 bits per dimension (~8x compression) and searches with SIMD kernels — no network hop to a vector database server. For multi-tenant RAG with hierarchical filtering, this eliminates the latency of repeated ChromaDB/external DB round trips.
+Turbovec quantizes embeddings to 2-4 bits per dimension (~8x compression) and searches with SIMD kernels — no network hop to a vector database server. For multi-tenant RAG with hierarchical filtering, this eliminates the latency of repeated external DB round trips.
 
 ## Prerequisites
 
@@ -263,22 +263,6 @@ Rebuilt after every insert/delete. This avoids the O(N) metadata scan that turbo
 ├── requirements.txt
 └── .env.example
 ```
-
-## Migration from ChromaDB
-
-This project replaces a ChromaDB-based implementation. Key differences:
-
-| Aspect | ChromaDB (before) | turbovec + PostgreSQL (after) |
-|---|---|---|
-| Vector storage | External ChromaDB server | In-process quantized index |
-| Metadata storage | ChromaDB collections | PostgreSQL tables |
-| Search latency | 3 network round trips per query | In-memory SIMD, no network hop |
-| Filtering | HNSW native metadata filter | Pre-built allowlist caches (O(1)) |
-| Company isolation | Collection-level filtering | Separate .tvim files per company |
-| Hierarchical fallback | 3 sequential search calls | Allowlist-based, single pass per scope |
-| Persistence | ChromaDB server manages | .tvim files + PostgreSQL |
-| Crash recovery | ChromaDB server handles | PostgreSQL + re-embed from DB |
-
 ## License
 
 MIT
